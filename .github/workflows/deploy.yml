@@ -74,6 +74,6 @@ jobs:
             fi
 
             cd infra
-            docker-compose pull sales-notes
-            docker-compose up -d sales-notes
-            docker image prune -f
+            sudo docker-compose pull sales-notes
+            sudo docker-compose up -d sales-notes
+            sudo docker image prune -f
