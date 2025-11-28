@@ -87,6 +87,15 @@ def crear_nota():
     status_code = 500
 
     data = request.get_json() or {}
+    
+    # Adaptación para soportar ambos formatos de JSON
+    if "direccion_facturacion_id" in data:
+        data["domicilio_facturacion_id"] = data.pop("direccion_facturacion_id")
+    if "direccion_envio_id" in data:
+        data["domicilio_envio_id"] = data.pop("direccion_envio_id")
+    if "contenido" in data:
+        data["items"] = data.pop("contenido")
+
     required = ["cliente_id", "domicilio_facturacion_id", "domicilio_envio_id", "items"]
     if not all(k in data for k in required):
         status_code = 400
