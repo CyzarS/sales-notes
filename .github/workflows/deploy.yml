@@ -74,12 +74,15 @@ jobs:
             export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
             
-            cd /home/ec2-user/proyecto_final_python
-            if [ -d ".git" ]; then
-              git pull origin main || true
+            # Clonar o actualizar el repositorio de infraestructura
+            if [ ! -d "/home/ec2-user/infra" ]; then
+              git clone https://github.com/CyzarS/infra.git /home/ec2-user/infra
+            else
+              cd /home/ec2-user/infra
+              git pull origin main
             fi
 
-            cd infra
+            cd /home/ec2-user/infra
             sudo docker-compose pull sales-notes
             sudo docker-compose up -d sales-notes
             sudo docker image prune -f
